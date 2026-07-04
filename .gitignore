@@ -1,0 +1,14 @@
+# PyCharm settings
+.idea/
+
+# Python artifacts
+__pycache__/
+*.pyc
+
+# Databases
+*.sqlite3
+
+# Local environments
+.venv/
+venv/
+ENV/
