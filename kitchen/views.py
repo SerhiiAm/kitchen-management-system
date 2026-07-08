@@ -59,3 +59,9 @@ class DishListView(LoginRequiredMixin, generic.ListView):
 class DishDetailView(LoginRequiredMixin, generic.DetailView):
     model = Dish
     queryset = Dish.objects.select_related("dish_type").prefetch_related("cooks")
+
+
+class DishCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Dish
+    fields = "__all__"
+    success_url = reverse_lazy("kitchen:dish-list")
