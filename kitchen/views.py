@@ -1,4 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import generic
 from django.urls import reverse_lazy
@@ -76,3 +78,16 @@ class DishUpdateView(LoginRequiredMixin, generic.UpdateView):
 class DishDeleteView(LoginRequiredMixin, generic.DeleteView):
     model = Dish
     success_url = reverse_lazy("kitchen:dish-list")
+
+
+@login_required
+def toggle_assign_to_dish(request, pk):
+    cook = request.user
+    dish = Dish.objects.get(id=pk)
+
+    if cook in dish.cooks.all():
+        dish.cooks.remove(cook)
+    else:
+        dish.cooks.add(cook)
+
+    return HttpResponseRedirect(reverse_lazy("kitchen:dish-detail", args=[pk]))
