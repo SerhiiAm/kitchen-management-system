@@ -101,4 +101,10 @@ class CookListView(LoginRequiredMixin, generic.ListView):
 
 class CookDetailView(LoginRequiredMixin, generic.DetailView):
     model = Cook
-    queryset = Cook.objects.select_related("cooks").prefetch_related("dish_type")
+    queryset = Cook.objects.prefetch_related("dishes__dish_type")
+
+
+class CookCreateView(LoginRequiredMixin, generic.CreateView):
+    model = Cook
+    fields = ["username", "first_name", "last_name", "years_of_experience"]
+    success_url = reverse_lazy("kitchen:cook-list")
