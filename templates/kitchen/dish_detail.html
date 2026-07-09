@@ -2,17 +2,17 @@
 
 {% block content %}
   <h1>
-
     {{ dish.name }}
 
+    {% if user.is_superuser %}
+      <a href="{% url 'kitchen:dish-delete' pk=dish.id %}" class="btn btn-danger link-to-page">
+        Delete
+      </a>
 
-    <a href="{% url 'kitchen:dish-delete' pk=dish.id %}" class="btn btn-danger link-to-page">
-      Delete
-    </a>
-
-    <a href="{% url 'kitchen:dish-update' pk=dish.id %}" class="btn btn-secondary link-to-page">
-      Update
-    </a>
+      <a href="{% url 'kitchen:dish-update' pk=dish.id %}" class="btn btn-secondary link-to-page">
+        Update
+      </a>
+    {% endif %}
   </h1>
 
 
@@ -24,14 +24,16 @@
   <h1>
     Cooks responsible for this dish
 
-    {% if user in dish.cooks.all %}
-      <a href="{% url 'kitchen:toggle-dish-assign' pk=dish.id %}" class="btn btn-danger link-to-page">
-        Remove me from this dish
-      </a>
-    {% else %}
-      <a href="{% url 'kitchen:toggle-dish-assign' pk=dish.id %}" class="btn btn-success link-to-page">
-        Assign me to this dish
-      </a>
+    {% if user.is_superuser %}
+      {% if user in dish.cooks.all %}
+        <a href="{% url 'kitchen:toggle-dish-assign' pk=dish.id %}" class="btn btn-danger link-to-page">
+          Remove me from this dish
+        </a>
+      {% else %}
+        <a href="{% url 'kitchen:toggle-dish-assign' pk=dish.id %}" class="btn btn-success link-to-page">
+          Assign me to this dish
+        </a>
+      {% endif %}
     {% endif %}
   </h1>
   <hr>
