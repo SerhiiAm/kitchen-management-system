@@ -31,6 +31,7 @@ class DishTypeListView(LoginRequiredMixin, generic.ListView):
     model = DishType
     context_object_name = "dish_types_list"
     template_name = "kitchen/dish_type_list.html"
+    paginate_by = 5
 
 
 class DishTypeCreateView(LoginRequiredMixin, generic.CreateView):
@@ -91,3 +92,8 @@ def toggle_assign_to_dish(request, pk):
         dish.cooks.add(cook)
 
     return HttpResponseRedirect(reverse_lazy("kitchen:dish-detail", args=[pk]))
+
+
+class CookListView(LoginRequiredMixin, generic.ListView):
+    model = Cook
+    paginate_by = 5
