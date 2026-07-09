@@ -1,5 +1,5 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import generic
@@ -109,18 +109,29 @@ class DishCreateView(LoginRequiredMixin, generic.CreateView):
     success_url = reverse_lazy("kitchen:dish-list")
 
 
-class DishUpdateView(LoginRequiredMixin, generic.UpdateView):
+class DishUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = Dish
     form_class = DishForm
     success_url = reverse_lazy("kitchen:dish-list")
 
+    def test_func(self):
+        return self.request.user.is_superuser
 
-class DishDeleteView(LoginRequiredMixin, generic.DeleteView):
+
+class DishDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     model = Dish
     success_url = reverse_lazy("kitchen:dish-list")
 
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
+def is_admin(user):
+    return user.is_superuser
+
 
 @login_required
+@user_passes_test(is_admin, login_url=None)
 def toggle_assign_to_dish(request, pk):
     cook = request.user
     dish = Dish.objects.get(id=pk)
