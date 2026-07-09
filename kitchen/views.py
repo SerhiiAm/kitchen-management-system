@@ -61,7 +61,7 @@ class DishListView(LoginRequiredMixin, generic.ListView):
 
 class DishDetailView(LoginRequiredMixin, generic.DetailView):
     model = Dish
-    queryset = Dish.objects.select_related("dish_type").prefetch_related("cooks")
+    queryset = Cook.objects.prefetch_related("dishes__dish_type")
 
 
 class DishCreateView(LoginRequiredMixin, generic.CreateView):
@@ -97,3 +97,8 @@ def toggle_assign_to_dish(request, pk):
 class CookListView(LoginRequiredMixin, generic.ListView):
     model = Cook
     paginate_by = 5
+
+
+class CookDetailView(LoginRequiredMixin, generic.DetailView):
+    model = Cook
+    queryset = Cook.objects.select_related("cooks").prefetch_related("dish_type")
