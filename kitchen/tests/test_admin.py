@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
-from kitchen.models import DishType, Cook, Dish
+from kitchen.models import DishType, Dish
 
 class ModelsTests(TestCase):
     def test_dish_type_str(self):
