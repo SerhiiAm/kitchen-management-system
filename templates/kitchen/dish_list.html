@@ -4,9 +4,11 @@
 {% block content %}
   <h1>
     Dish list
-    <a href="{% url 'kitchen:dish-create' %}" class="btn btn-primary link-to-page">
-      Create
-    </a>
+    {% if user.is_superuser or user.is_staff %}
+      <a href="{% url 'kitchen:dish-create' %}" class="btn btn-primary link-to-page">
+        Create
+      </a>
+    {% endif %}
   </h1>
 
   <form action="" method="get" class="form-inline mb-3">

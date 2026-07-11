@@ -4,8 +4,10 @@
 {% block content %}
   <h1>
     Dish Type List
-    <a href="{% url 'kitchen:dish-type-create' %}" class="btn btn-primary link-to-page">
+    {% if user.is_superuser or user.is_staff %}
+      <a href="{% url 'kitchen:dish-type-create' %}" class="btn btn-primary link-to-page">
       Create
+    {% endif %}
     </a>
   </h1>
 
@@ -19,8 +21,10 @@
       <tr>
         <th>ID</th>
         <th>Name</th>
-        <th>Update</th>
-        <th>Delete</th>
+        {% if user.is_superuser or user.is_staff %}
+          <th>Update</th>
+          <th>Delete</th>
+        {% endif %}
       </tr>
 
       {% for dish_type in dish_types_list %}
@@ -31,17 +35,19 @@
           <td>
             {{ dish_type.name }}
           </td>
-          <td>
-            <a href="{% url 'kitchen:dish-type-update' pk=dish_type.id %}">
-              Update
-            </a>
-          </td>
-          <td>
-            <a style="color: red"
-               href="{% url 'kitchen:dish-type-delete' pk=dish_type.id %}">
-              Delete
-            </a>
-          </td>
+          {% if user.is_superuser or user.is_staff %}
+            <td>
+              <a href="{% url 'kitchen:dish-type-update' pk=dish_type.id %}">
+                Update
+              </a>
+            </td>
+            <td>
+              <a style="color: red"
+                 href="{% url 'kitchen:dish-type-delete' pk=dish_type.id %}">
+                Delete
+              </a>
+            </td>
+          {% endif %}
         </tr>
       {% endfor %}
     </table>
