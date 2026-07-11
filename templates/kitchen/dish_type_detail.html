@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Category: {{ dish_type.name }}</h1>
+  <hr>
+
+  <h3>Dishes in this category:</h3>
+  {% if dish_type.dishes.all %}
+    <ul>
+      {% for dish in dish_type.dishes.all %}
+        <li>
+          <a href="{% url 'kitchen:dish-detail' pk=dish.id %}">
+            {{ dish.name }}
+          </a>
+          — ${{ dish.price }}
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>There are no dishes in this category yet.</p>
+  {% endif %}
+
+  <a href="{% url 'kitchen:dish-type-list' %}" class="btn btn-secondary mt-3">
+    Back to categories
+  </a>
+{% endblock %}
