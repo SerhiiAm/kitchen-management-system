@@ -17,6 +17,10 @@ from kitchen.forms import (
 from kitchen.models import DishType, Cook, Dish
 
 
+def is_admin(user):
+    return user.is_superuser or user.is_staff
+
+
 def index(request):
     """View function for the home page of the site."""
 
@@ -58,24 +62,33 @@ class DishTypeListView(LoginRequiredMixin, generic.ListView):
         return queryset
 
 
-class DishTypeCreateView(LoginRequiredMixin, generic.CreateView):
+class DishTypeCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
     model = DishType
     fields = "__all__"
     success_url = reverse_lazy("kitchen:dish-type-list")
     template_name = "kitchen/dish_type_form.html"
 
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
 
-class DishTypeUpdateView(LoginRequiredMixin, generic.UpdateView):
+
+class DishTypeUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = DishType
     fields = "__all__"
     success_url = reverse_lazy("kitchen:dish-type-list")
     template_name = "kitchen/dish_type_form.html"
 
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
 
-class DishTypeDeleteView(LoginRequiredMixin, generic.DeleteView):
+
+class DishTypeDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     model = DishType
     template_name = "kitchen/dish_type_confirm_delete.html"
     success_url = reverse_lazy("kitchen:dish-type-list")
+
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
 
 
 class DishListView(LoginRequiredMixin, generic.ListView):
@@ -103,10 +116,13 @@ class DishDetailView(LoginRequiredMixin, generic.DetailView):
     queryset = Dish.objects.select_related("dish_type").prefetch_related("cooks")
 
 
-class DishCreateView(LoginRequiredMixin, generic.CreateView):
+class DishCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
     model = Dish
     form_class = DishForm
     success_url = reverse_lazy("kitchen:dish-list")
+
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
 
 
 class DishUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
@@ -115,7 +131,7 @@ class DishUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView
     success_url = reverse_lazy("kitchen:dish-list")
 
     def test_func(self):
-        return self.request.user.is_superuser
+        return self.request.user.is_superuser or self.request.user.is_staff
 
 
 class DishDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
@@ -123,11 +139,7 @@ class DishDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView
     success_url = reverse_lazy("kitchen:dish-list")
 
     def test_func(self):
-        return self.request.user.is_superuser
-
-
-def is_admin(user):
-    return user.is_superuser
+        return self.request.user.is_superuser or self.request.user.is_staff
 
 
 @login_required
@@ -169,20 +181,29 @@ class CookDetailView(LoginRequiredMixin, generic.DetailView):
     queryset = Cook.objects.prefetch_related("dishes__dish_type")
 
 
-class CookCreateView(LoginRequiredMixin, generic.CreateView):
+class CookCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView):
     model = Cook
     form_class = CookCreationForm
     success_url = reverse_lazy("kitchen:cook-list")
 
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
 
-class CookUpdateView(LoginRequiredMixin, generic.UpdateView):
+
+class CookUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = Cook
     form_class = CookExperienceUpdateForm
 
     def get_success_url(self):
         return reverse_lazy("kitchen:cook-detail", kwargs={"pk": self.object.pk})
 
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
 
-class CookDeleteView(LoginRequiredMixin, generic.DeleteView):
+
+class CookDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     model = Cook
     success_url = reverse_lazy("kitchen:cook-list")
+
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
