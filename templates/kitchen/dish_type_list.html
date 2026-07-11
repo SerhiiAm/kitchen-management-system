@@ -6,9 +6,10 @@
     Dish Type List
     {% if user.is_superuser or user.is_staff %}
       <a href="{% url 'kitchen:dish-type-create' %}" class="btn btn-primary link-to-page">
-      Create
+        Create
+      </a>
     {% endif %}
-    </a>
+
   </h1>
 
   <form action="" method="get" class="form-inline mb-3">
@@ -33,7 +34,9 @@
             {{ dish_type.id }}
           </td>
           <td>
-            {{ dish_type.name }}
+            <a href="{% url 'kitchen:dish-type-detail' pk=dish_type.id %}">
+              {{ dish_type.name }}
+            </a>
           </td>
           {% if user.is_superuser or user.is_staff %}
             <td>
