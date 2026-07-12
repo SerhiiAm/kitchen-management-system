@@ -1,32 +1,163 @@
-{% extends "base.html" %}
+{% extends "layouts/base-presentation.html" %}
 {% load crispy_forms_filters %}
 
-{% block content %}
-  <h1>
-    Dish list
-    {% if user.is_superuser or user.is_staff %}
-      <a href="{% url 'kitchen:dish-create' %}" class="btn btn-primary link-to-page">
-        Create
-      </a>
-    {% endif %}
-  </h1>
+{% block title %}Dish List{% endblock %}
 
-  <form action="" method="get" class="form-inline mb-3">
-    {{ search_form|crispy }}
-    <input type="submit" value="Search" class="btn btn-secondary ml-2">
-  </form>
-  {% if dish_list %}
-    <ul>
-      {% for dish in dish_list %}
-        <li>
-          <a href="{% url 'kitchen:dish-detail' pk=dish.id %}">
-            {{ dish.name }}
-          </a>
-          ({{ dish.dish_type.name }})
-        </li>
-      {% endfor %}
-    </ul>
-  {% else %}
-    <p>There are no dishes in the kitchen.</p>
-  {% endif %}
+{% block content %}
+  <section class="py-5 m-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+
+          <div class="card shadow-lg border-radius-lg bg-white mb-4">
+
+            <div
+                class="card-header bg-transparent d-flex justify-content-between align-items-center pb-2 border-bottom-0">
+              <div>
+                <h3 class="font-weight-bolder text-gradient text-primary m-0">Dish List</h3>
+                <p class="text-sm text-secondary mb-0">Manage and view your entire kitchen menu</p>
+              </div>
+
+              {% if user.is_superuser or user.is_staff %}
+                <a href="{% url 'kitchen:dish-create' %}"
+                   class="btn btn-icon btn-3 bg-gradient-primary m-0 d-flex align-items-center">
+                  <span class="btn-inner--icon me-2"><i class="fas fa-plus text-xs"></i></span>
+                  <span class="btn-inner--text font-weight-bold">Create</span>
+                </a>
+              {% endif %}
+            </div>
+
+            <div class="px-4 py-3">
+              <form method="get" action="" class="m-0">
+                <div class="d-flex align-items-center gap-2">
+
+                  <div style="min-width: 250px;">
+                    <input type="text"
+                           name="name"
+                           class="form-control"
+                           placeholder="Search by name"
+                           value="{{ request.GET.name|default:'' }}">
+                  </div>
+
+                  <button type="submit"
+                          class="btn bg-gradient-secondary mb-0 d-flex align-items-center justify-content-center"
+                          style="height: 41px; padding: 0 20px;">
+                    SEARCH
+                  </button>
+
+                </div>
+              </form>
+            </div>
+
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-0">
+
+                {% if dish_list %}
+                  <table class="table align-items-center mb-0">
+                    <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-4">ID</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">Name</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">Dish Type
+                      </th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% for dish in dish_list %}
+                      <tr class="border-bottom border-gray-100">
+                        <td class="ps-4">
+                          <p class="text-xs font-weight-bold text-secondary mb-0">{{ dish.id }}</p>
+                        </td>
+
+                        <td class="ps-3">
+                          <h6 class="mb-0 text-sm font-weight-bold">
+                            <a href="{% url 'kitchen:dish-detail' pk=dish.id %}"
+                               class="text-dark type-link text-primary-hover">
+                              {{ dish.name }}
+                            </a>
+                          </h6>
+                        </td>
+
+                        <td class="ps-3">
+                          <span class="badge badge-sm bg-gradient-success font-weight-bold">
+                            {{ dish.dish_type.name }}
+                          </span>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                {% else %}
+                  <div class="text-center py-5">
+                    <p class="text-sm font-weight-bold text-secondary mb-0">There are no dishes in the kitchen.</p>
+                  </div>
+                {% endif %}
+
+              </div>
+            </div>
+
+            {% if is_paginated %}
+              <div class="card-footer bg-transparent border-top-0 pt-3 pb-3">
+                <div class="d-flex justify-content-center align-items-center gap-3">
+
+                <span class="text-sm font-weight-bold text-secondary">
+                  Page {{ page_obj.number }} of {{ paginator.num_pages }}
+                </span>
+
+                  <nav aria-label="Page navigation">
+                    <ul class="pagination pagination-primary m-0 d-flex gap-2">
+
+                      {% if page_obj.has_previous %}
+                        <li class="page-item">
+                          <a class="page-link font-weight-bold bg-gradient-primary text-white border-0 d-flex align-items-center justify-content-center"
+                             href="?page=
+
+                                 {{ page_obj.previous_page_number }}{% if request.GET.name %}&name={{ request.GET.name }}{% endif %}"
+                             style="width: 36px; height: 36px; border-radius: 50% !important;" aria-label="Previous">
+                            &lt;
+                          </a>
+                        </li>
+                      {% else %}
+                        <li class="page-item disabled">
+                        <span
+                            class="page-link font-weight-bold bg-light text-muted border-0 d-flex align-items-center justify-content-center"
+                            style="width: 36px; height: 36px; border-radius: 50% !important; opacity: 0.6;">
+                          &lt;
+                        </span>
+                        </li>
+                      {% endif %}
+
+                      {% if page_obj.has_next %}
+                        <li class="page-item">
+                          <a class="page-link font-weight-bold bg-gradient-primary text-white border-0 d-flex align-items-center justify-content-center"
+                             href="?page=
+
+                                 {{ page_obj.next_page_number }}{% if request.GET.name %}&name={{ request.GET.name }}{% endif %}"
+                             style="width: 36px; height: 36px; border-radius: 50% !important;" aria-label="Next">
+                            &gt;
+                          </a>
+                        </li>
+                      {% else %}
+                        <li class="page-item disabled">
+                        <span
+                            class="page-link font-weight-bold bg-light text-muted border-0 d-flex align-items-center justify-content-center"
+                            style="width: 36px; height: 36px; border-radius: 50% !important; opacity: 0.6;">
+                          &gt;
+                        </span>
+                        </li>
+                      {% endif %}
+
+                    </ul>
+                  </nav>
+                </div>
+              </div>
+            {% endif %}
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock %}
