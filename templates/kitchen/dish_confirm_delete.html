@@ -1,17 +1,47 @@
-{% extends "base.html" %}
+{% extends "layouts/base-presentation.html" %}
+
+{% block title %}Delete Dish - {{ object.name }}{% endblock %}
 
 {% block content %}
+  <section class="py-5 m-4">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8">
 
-  <h1>Are you sure you want to delete the dish: "{{ object.name }}"?</h1>
+          <div class="card shadow-lg border-radius-lg bg-white mb-4">
 
-  <form action="" method="post">
-    {% csrf_token %}
+            <div class="card-header bg-transparent pb-0 border-bottom-0 text-center mt-4">
+              <div
+                  class="icon icon-shape icon-lg bg-gradient-danger shadow text-center border-radius-md mb-3 mx-auto d-flex align-items-center justify-content-center">
+                <i class="fas fa-exclamation-triangle text-white opacity-10"></i>
+              </div>
+              <h3 class="font-weight-bolder text-dark m-0">Confirm Deletion</h3>
+              <p class="text-sm text-secondary mt-2">This action cannot be undone.</p>
+            </div>
 
-    <input type="submit" value="Yes, delete" class="btn btn-danger">
+            <div class="card-body text-center">
+              <p class="text-lg mb-4">
+                Are you sure you want to delete the dish: <br>
+                <strong class="text-gradient text-danger h4">{{ object.name }}</strong>?
+              </p>
 
+              <form action="" method="post" class="d-flex justify-content-center gap-3 mt-4">
+                {% csrf_token %}
 
-    <a href="{% url 'kitchen:dish-detail' pk=object.id %}" class="btn btn-secondary">
-      Cancel
-    </a>
-  </form>
+                <a href="{% url 'kitchen:dish-detail' pk=object.id %}" class="btn bg-gradient-secondary mb-0">
+                  Cancel
+                </a>
+
+                <button type="submit" class="btn bg-gradient-danger mb-0">
+                  Yes, delete
+                </button>
+              </form>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock %}
