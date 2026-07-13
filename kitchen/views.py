@@ -75,6 +75,7 @@ class DishTypeCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.Create
     fields = "__all__"
     success_url = reverse_lazy("kitchen:dish-type-list")
     template_name = "kitchen/dish_type_form.html"
+    raise_exception = True
 
     def test_func(self):
         return self.request.user.is_superuser or self.request.user.is_staff
@@ -85,6 +86,7 @@ class DishTypeUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.Update
     fields = "__all__"
     success_url = reverse_lazy("kitchen:dish-type-list")
     template_name = "kitchen/dish_type_form.html"
+    raise_exception = True
 
     def test_func(self):
         return self.request.user.is_superuser or self.request.user.is_staff
@@ -94,6 +96,7 @@ class DishTypeDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.Delete
     model = DishType
     template_name = "kitchen/dish_type_confirm_delete.html"
     success_url = reverse_lazy("kitchen:dish-type-list")
+    raise_exception = True
 
     def test_func(self):
         return self.request.user.is_superuser or self.request.user.is_staff
@@ -128,6 +131,7 @@ class DishCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView
     model = Dish
     form_class = DishForm
     success_url = reverse_lazy("kitchen:dish-list")
+    raise_exception = True
 
     def test_func(self):
         return self.request.user.is_superuser or self.request.user.is_staff
@@ -137,6 +141,7 @@ class DishUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView
     model = Dish
     form_class = DishForm
     success_url = reverse_lazy("kitchen:dish-list")
+    raise_exception = True
 
     def test_func(self):
         return self.request.user.is_superuser or self.request.user.is_staff
@@ -145,6 +150,7 @@ class DishUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView
 class DishDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     model = Dish
     success_url = reverse_lazy("kitchen:dish-list")
+    raise_exception = True
 
     def test_func(self):
         return self.request.user.is_superuser or self.request.user.is_staff
@@ -193,6 +199,7 @@ class CookCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView
     model = Cook
     form_class = CookCreationForm
     success_url = reverse_lazy("kitchen:cook-list")
+    raise_exception = True
 
     def test_func(self):
         return self.request.user.is_superuser or self.request.user.is_staff
@@ -201,6 +208,7 @@ class CookCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView
 class CookUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
     model = Cook
     form_class = CookExperienceUpdateForm
+    raise_exception = True
 
     def get_success_url(self):
         return reverse_lazy("kitchen:cook-detail", kwargs={"pk": self.object.pk})
@@ -212,6 +220,7 @@ class CookUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView
 class CookDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
     model = Cook
     success_url = reverse_lazy("kitchen:cook-list")
+    raise_exception = True
 
     def test_func(self):
         return self.request.user.is_superuser or self.request.user.is_staff
