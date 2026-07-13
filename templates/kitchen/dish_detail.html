@@ -78,7 +78,7 @@
                       <p class="text-dark font-weight-bold text-sm mb-0">
                         {{ cook.username }}
                         <span class="text-muted font-weight-normal ms-1">
-                          ({% if cook.first_name %}{{ cook.first_name }} {{ cook.last_name }}{% else %}No Name{% endif %})
+                          {% if cook.first_name or cook.last_name %}({{ cook.get_full_name }}){% else %}(No Name){% endif %}
                         </span>
                       </p>
                     </div>
