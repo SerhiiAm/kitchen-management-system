@@ -1,39 +1,108 @@
-{% extends "base.html" %}
+{% extends "layouts/base-presentation.html" %}
+
+{% block title %}Cook Profile - {{ cook.username }}{% endblock %}
 
 {% block content %}
-  <h1>
-    Username: {{ cook.username }}
-    {% if user.is_superuser or user.is_staff %}
-      <a href="{% url 'kitchen:cook-delete' pk=cook.id %}" class="btn btn-danger link-to-page">
-        Delete
-      </a>
+  <section class="py-5 m-4">
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
 
-      <a href="{% url 'kitchen:cook-update' pk=cook.id %}" class="btn btn-secondary link-to-page">
-        Update experience
-      </a>
-    {% endif %}
-  </h1>
+          <div class="card shadow-lg border-radius-lg bg-white mb-4">
 
-  <p><strong>First name:</strong> {{ cook.first_name }}</p>
-  <p><strong>Last name:</strong> {{ cook.last_name }}</p>
-  <p><strong>Years of experience:</strong> {{ cook.years_of_experience }}</p>
-  <p><strong>Is staff:</strong> {{ cook.is_staff }}</p>
+            <div
+                class="card-header bg-transparent d-flex justify-content-between align-items-center pb-3 border-bottom">
+              <div>
+                <p class="text-xs font-weight-bold text-uppercase text-primary text-gradient mb-1">Cook Profile</p>
+                <h3 class="font-weight-bolder m-0">@{{ cook.username }}</h3>
+              </div>
 
-  <div class="ml-3">
-    <h4>Dishes assigned to this cook</h4>
+              {% if user.is_superuser or user.is_staff %}
+                <div class="d-flex gap-2">
+                  <a href="{% url 'kitchen:cook-update' pk=cook.id %}"
+                     class="btn bg-gradient-secondary mb-0 d-flex align-items-center p-2 px-3">
+                    <span class="btn-inner--icon me-2"><i class="fas fa-edit text-xs"></i></span>
+                    <span class="btn-inner--text font-weight-bold">UPDATE EXPERIENCE</span>
+                  </a>
+                  <a href="{% url 'kitchen:cook-delete' pk=cook.id %}"
+                     class="btn bg-gradient-danger mb-0 d-flex align-items-center p-2 px-3">
+                    <span class="btn-inner--icon me-2"><i class="fas fa-trash text-xs"></i></span>
+                    <span class="btn-inner--text font-weight-bold">DELETE</span>
+                  </a>
+                </div>
+              {% endif %}
+            </div>
 
-    {% for dish in cook.dishes.all %}
-      <hr>
-      <p><strong>Dish name:</strong>
-        <a href="{% url 'kitchen:dish-detail' pk=dish.id %}">
-          {{ dish.name }}
-        </a>
-      </p>
-      <p><strong>Dish Type:</strong> {{ dish.dish_type.name }}</p>
-      <p class="text-muted"><strong>Price:</strong> {{ dish.price }}</p>
+            <div class="card-body">
+              <div class="row mb-4">
+                <div class="col-sm-4 mb-3 mb-sm-0">
+                  <span class="text-xs text-secondary font-weight-bold text-uppercase">Full Name</span>
+                  <h5 class="font-weight-bolder text-dark mt-1">
+                    {% if cook.first_name or cook.last_name %}{{ cook.get_full_name }}{% else %}
+                      <span class="text-muted font-weight-normal text-sm">Name not provided</span>{% endif %}
+                  </h5>
+                </div>
 
-    {% empty %}
-      <p>This cook has no assigned dishes yet!</p>
-    {% endfor %}
-  </div>
+                <div class="col-sm-4 mb-3 mb-sm-0">
+                  <span class="text-xs text-secondary font-weight-bold text-uppercase">Experience</span>
+                  <h5 class="font-weight-bolder text-dark mt-1">{{ cook.years_of_experience }} years</h5>
+                </div>
+
+                <div class="col-sm-4">
+                  <span class="text-xs text-secondary font-weight-bold text-uppercase">Kitchen Role</span>
+                  <div class="mt-1">
+                    {% if cook.is_superuser %}
+                      <span class="badge badge-sm bg-gradient-primary font-weight-bold">Manager</span>
+                    {% elif cook.is_staff %}
+                      <span class="badge badge-sm bg-gradient-info font-weight-bold">Staff</span>
+                    {% else %}
+                      <span class="badge badge-sm bg-gradient-secondary font-weight-bold">Cook</span>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+
+              <hr class="horizontal dark my-4">
+
+              <div class="dishes-section">
+                <h5 class="font-weight-bolder text-gradient text-primary mb-3">Dishes assigned to this cook</h5>
+
+                <div class="list-group">
+                  {% for dish in cook.dishes.all %}
+                    <div
+                        class="list-group-item border-0 p-3 bg-gray-100 border-radius-lg mb-3 d-flex justify-content-between align-items-center">
+                      <div>
+                        <h6 class="mb-1 text-sm font-weight-bold">
+                          <a href="{% url 'kitchen:dish-detail' pk=dish.id %}"
+                             class="text-dark type-link text-primary-hover">
+                            {{ dish.name }}
+                          </a>
+                        </h6>
+                        <p class="text-xs text-secondary mb-0">Type: {{ dish.dish_type.name }}</p>
+                      </div>
+                      <span class="badge bg-gradient-success text-xxs font-weight-bold">${{ dish.price }}</span>
+                    </div>
+                  {% empty %}
+                    <div class="text-center py-4 bg-gray-100 border-radius-lg">
+                      <p class="text-sm font-weight-bold text-secondary mb-0">This cook has no assigned dishes yet!</p>
+                    </div>
+                  {% endfor %}
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-start mt-5">
+                <a href="{% url 'kitchen:cook-list' %}"
+                   class="btn bg-gradient-secondary mb-0 d-flex align-items-center">
+                  <span class="btn-inner--icon me-2"><i class="fas fa-arrow-left text-xs"></i></span>
+                  BACK TO LIST
+                </a>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
 {% endblock %}
