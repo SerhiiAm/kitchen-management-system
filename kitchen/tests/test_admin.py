@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 from kitchen.models import DishType, Dish
 
+
 class ModelsTests(TestCase):
     def test_dish_type_str(self):
         """Test that DishType string representation is correct"""

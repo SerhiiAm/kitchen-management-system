@@ -3,6 +3,7 @@ from kitchen.forms import DishForm, CookCreationForm, CookExperienceUpdateForm
 from kitchen.models import DishType
 from django.contrib.auth import get_user_model
 
+
 class FormTests(TestCase):
     def setUp(self):
         self.dish_type = DishType.objects.create(name="Main Course")
