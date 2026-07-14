@@ -1,7 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.decorators import login_required, user_passes_test
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
 from django.views import generic
 from django.urls import reverse_lazy
 
@@ -21,23 +19,21 @@ def is_admin(user):
     return user.is_superuser or user.is_staff
 
 
-def index(request):
-    """View function for the home page of the site."""
+class IndexView(generic.TemplateView):
+    template_name = "kitchen/index.html"
 
-    num_dish_types = DishType.objects.count()
-    num_cooks = Cook.objects.count()
-    num_dishes = Dish.objects.count()
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    num_visits = request.session.get('num_visits', 0) + 1
-    request.session['num_visits'] = num_visits
-    context = {
-        'num_dish_types': num_dish_types,
-        'num_cooks': num_cooks,
-        'num_dishes': num_dishes,
-        'num_visits': num_visits,
-    }
+        context["num_dish_types"] = DishType.objects.count()
+        context["num_cooks"] = Cook.objects.count()
+        context["num_dishes"] = Dish.objects.count()
 
-    return render(request, "kitchen/index.html", context)
+        num_visits = self.request.session.get("num_visits", 0) + 1
+        self.request.session["num_visits"] = num_visits
+        context["num_visits"] = num_visits
+
+        return context
 
 
 class DishTypeListView(LoginRequiredMixin, generic.ListView):
@@ -156,18 +152,22 @@ class DishDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView
         return self.request.user.is_superuser or self.request.user.is_staff
 
 
-@login_required
-@user_passes_test(is_admin, login_url=None)
-def toggle_assign_to_dish(request, pk):
-    cook = request.user
-    dish = Dish.objects.get(id=pk)
+class ToggleAssignToDishView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
+    raise_exception = True
 
-    if cook in dish.cooks.all():
-        dish.cooks.remove(cook)
-    else:
-        dish.cooks.add(cook)
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user.is_staff
 
-    return HttpResponseRedirect(reverse_lazy("kitchen:dish-detail", args=[pk]))
+    def get(self, request, pk, *args, **kwargs):
+        cook = self.request.user
+        dish = Dish.objects.get(id=pk)
+
+        if cook in dish.cooks.all():
+            dish.cooks.remove(cook)
+        else:
+            dish.cooks.add(cook)
+
+        return HttpResponseRedirect(reverse_lazy("kitchen:dish-detail", args=[pk]))
 
 
 class CookListView(LoginRequiredMixin, generic.ListView):

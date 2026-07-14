@@ -1,10 +1,10 @@
 from django.urls import path
 
 from kitchen.views import (
-    index, DishTypeListView, DishTypeCreateView,
+    IndexView, DishTypeListView, DishTypeCreateView,
     DishTypeUpdateView, DishTypeDeleteView, DishListView,
     DishDetailView, DishCreateView, DishUpdateView,
-    DishDeleteView, toggle_assign_to_dish, CookListView,
+    DishDeleteView, ToggleAssignToDishView, CookListView,
     CookDetailView, CookCreateView, CookUpdateView,
     CookDeleteView, DishTypeDetailView,
 )
@@ -12,7 +12,7 @@ from kitchen.views import (
 app_name = "kitchen"
 
 urlpatterns = [
-    path("", index, name="index"),
+    path("", IndexView.as_view(), name="index"),
     path("dish-type/", DishTypeListView.as_view(), name="dish-type-list"),
     path("dish-types/<int:pk>/", DishTypeDetailView.as_view(), name="dish-type-detail"),
     path("dish-type/create/", DishTypeCreateView.as_view(), name="dish-type-create"),
@@ -23,7 +23,7 @@ urlpatterns = [
     path("dish/create/", DishCreateView.as_view(), name="dish-create"),
     path("dish/<int:pk>/update/", DishUpdateView.as_view(), name="dish-update"),
     path("dish/<int:pk>/delete/", DishDeleteView.as_view(), name="dish-delete"),
-    path("dish/<int:pk>/toggle-assign/", toggle_assign_to_dish, name="toggle-dish-assign"),
+    path("dish/<int:pk>/toggle-assign/", ToggleAssignToDishView.as_view(), name="toggle-dish-assign"),
     path("cook/", CookListView.as_view(), name="cook-list"),
     path("cook/<int:pk>/", CookDetailView.as_view(), name="cook-detail"),
     path("cook/create/", CookCreateView.as_view(), name="cook-create"),
