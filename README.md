@@ -16,7 +16,7 @@ cooks) assignments.
 
 * **Backend:** Python 3.x, Django 4.x / 5.x
 * **Database:** SQLite (Development)
-* **Frontend:** HTML5, CSS3, Bootstrap 4, Crispy Forms
+* **Frontend:** HTML5, CSS3, Bootstrap 5, Crispy Forms
 
 ## 📊 Database Structure
 

@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "crispy_bootstrap4",
+    "crispy_bootstrap5",
     "crispy_forms",
     "kitchen"
 ]
@@ -126,4 +126,4 @@ LOGIN_REDIRECT_URL = "kitchen:index"
 
 LOGOUT_REDIRECT_URL ="login"
 
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
