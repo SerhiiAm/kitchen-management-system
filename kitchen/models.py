@@ -21,6 +21,7 @@ class Cook(AbstractUser):
     class Meta:
         verbose_name = "Cook"
         verbose_name_plural = "Cooks"
+        ordering = ["username"]
 
     def __str__(self):
         return f"{self.username} ({self.first_name} {self.last_name})"
@@ -35,6 +36,9 @@ class Dish(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     dish_type = models.ForeignKey(DishType, on_delete=models.CASCADE, related_name="dishes")
     cooks = models.ManyToManyField(Cook, related_name="dishes")
+
+    class Meta:
+        ordering = ["name"]
 
     def __str__(self):
         return f"{self.name}"
