@@ -74,7 +74,7 @@ class DishTypeCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.Create
     raise_exception = True
 
     def test_func(self):
-        return self.request.user.is_superuser or self.request.user.is_staff
+        return is_admin(self.request.user)
 
 
 class DishTypeUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
@@ -85,7 +85,7 @@ class DishTypeUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.Update
     raise_exception = True
 
     def test_func(self):
-        return self.request.user.is_superuser or self.request.user.is_staff
+        return is_admin(self.request.user)
 
 
 class DishTypeDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
@@ -95,7 +95,7 @@ class DishTypeDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.Delete
     raise_exception = True
 
     def test_func(self):
-        return self.request.user.is_superuser or self.request.user.is_staff
+        return is_admin(self.request.user)
 
 
 class DishListView(LoginRequiredMixin, generic.ListView):
@@ -130,7 +130,7 @@ class DishCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView
     raise_exception = True
 
     def test_func(self):
-        return self.request.user.is_superuser or self.request.user.is_staff
+        return is_admin(self.request.user)
 
 
 class DishUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
@@ -140,7 +140,7 @@ class DishUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView
     raise_exception = True
 
     def test_func(self):
-        return self.request.user.is_superuser or self.request.user.is_staff
+        return is_admin(self.request.user)
 
 
 class DishDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
@@ -149,14 +149,14 @@ class DishDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView
     raise_exception = True
 
     def test_func(self):
-        return self.request.user.is_superuser or self.request.user.is_staff
+        return is_admin(self.request.user)
 
 
 class ToggleAssignToDishView(LoginRequiredMixin, UserPassesTestMixin, generic.View):
     raise_exception = True
 
     def test_func(self):
-        return self.request.user.is_superuser or self.request.user.is_staff
+        return is_admin(self.request.user)
 
     def get(self, request, pk, *args, **kwargs):
         cook = self.request.user
@@ -202,7 +202,7 @@ class CookCreateView(LoginRequiredMixin, UserPassesTestMixin, generic.CreateView
     raise_exception = True
 
     def test_func(self):
-        return self.request.user.is_superuser or self.request.user.is_staff
+        return is_admin(self.request.user)
 
 
 class CookUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView):
@@ -214,7 +214,7 @@ class CookUpdateView(LoginRequiredMixin, UserPassesTestMixin, generic.UpdateView
         return reverse_lazy("kitchen:cook-detail", kwargs={"pk": self.object.pk})
 
     def test_func(self):
-        return self.request.user.is_superuser or self.request.user.is_staff
+        return is_admin(self.request.user)
 
 
 class CookDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView):
@@ -223,4 +223,4 @@ class CookDeleteView(LoginRequiredMixin, UserPassesTestMixin, generic.DeleteView
     raise_exception = True
 
     def test_func(self):
-        return self.request.user.is_superuser or self.request.user.is_staff
+        return is_admin(self.request.user)
