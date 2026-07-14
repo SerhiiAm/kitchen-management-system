@@ -29,3 +29,24 @@ cooks) assignments.
    git clone https://github.com/SerhiiAm/kitchen-management-system.git
    cd kitchen-management-system
    ```
+
+2. **Create and activate virtual environment:**
+    ```bash
+    python -m venv venv
+    source venv/Scripts/activate  # On Windows (Git Bash)
+    # Or "source venv/bin/activate" on macOS/Linux
+    ```
+
+3. **Install dependencies:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+4. **Run migrations & Start server:**
+  ```bash
+    python manage.py migrate
+    python manage.py runserver
+  ```
+
+## Demo
+![Website Interface](demo.png)
