@@ -1,0 +1,115 @@
+{% extends "layouts/base-presentation.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Cook List{% endblock %}
+
+{% block content %}
+  <section class="py-5 m-4">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+
+          <div class="card shadow-lg border-radius-lg bg-white mb-4">
+
+            <div
+                class="card-header bg-transparent d-flex justify-content-between align-items-center pb-2 border-bottom-0">
+              <div>
+                <h3 class="font-weight-bolder text-gradient text-primary m-0">Cook List</h3>
+                <p class="text-sm text-secondary mb-0">Manage and view professional cooks in the kitchen</p>
+              </div>
+
+              {% if user.is_superuser or user.is_staff %}
+                <a href="{% url 'kitchen:cook-create' %}"
+                   class="btn btn-icon btn-3 bg-gradient-primary m-0 d-flex align-items-center">
+                  <span class="btn-inner--icon me-2"><i class="fas fa-plus text-xs"></i></span>
+                  <span class="btn-inner--text font-weight-bold">Create</span>
+                </a>
+              {% endif %}
+            </div>
+
+            <div class="px-4 py-3">
+              <form method="get" action="" class="m-0">
+                <div class="d-flex align-items-center gap-2">
+                  <div style="min-width: 250px;">
+                    <input type="text" name="username" class="form-control" placeholder="Search by username"
+                           value="{{ request.GET.username|default:'' }}">
+                  </div>
+                  <button type="submit"
+                          class="btn bg-gradient-secondary mb-0 d-flex align-items-center justify-content-center"
+                          style="height: 40px; padding: 0 20px;">
+                    SEARCH
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <div class="card-body px-0 pt-0 pb-2">
+              <div class="table-responsive p-0">
+                {% if cook_list %}
+                  <table class="table align-items-center mb-0">
+                    <thead>
+                    <tr>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-4">ID</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">Username</th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">First Name
+                      </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3">Last Name
+                      </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-3 text-center">
+                        Experience
+                      </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for cook in cook_list %}
+                      <tr class="border-bottom border-gray-100">
+                        <td class="ps-4">
+                          <p class="text-xs font-weight-bold text-secondary mb-0">{{ cook.id }}</p>
+                        </td>
+
+                        <td class="ps-3">
+                          <h6 class="mb-0 text-sm font-weight-bold text-dark">
+                            <a href="{{ cook.get_absolute_url }}" class="text-dark type-link text-primary-hover">
+                              {{ cook.username }}
+                              {% if user == cook %}
+                                <span class="text-muted font-weight-normal ms-1">(Me)</span>
+                              {% endif %}
+                            </a>
+                          </h6>
+                        </td>
+
+                        <td class="ps-3">
+                          <p class="text-xs font-weight-bold text-secondary mb-0">
+                            {{ cook.first_name|default:"—" }}
+                          </p>
+                        </td>
+
+                        <td class="ps-3">
+                          <p class="text-xs font-weight-bold text-secondary mb-0">
+                            {{ cook.last_name|default:"—" }}
+                          </p>
+                        </td>
+
+                        <td class="ps-3 text-center">
+                          <span class="badge badge-sm bg-gradient-success font-weight-bold">
+                            {{ cook.years_of_experience }} yrs
+                          </span>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+                {% else %}
+                  <div class="text-center py-5">
+                    <p class="text-sm font-weight-bold text-secondary mb-0">There are no cooks in the kitchen.</p>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}
