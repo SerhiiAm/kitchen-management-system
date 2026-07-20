@@ -158,7 +158,7 @@ class ToggleAssignToDishView(LoginRequiredMixin, UserPassesTestMixin, generic.Vi
     def test_func(self):
         return is_admin(self.request.user)
 
-    def get(self, request, pk, *args, **kwargs):
+    def post(self, request, pk, *args, **kwargs):
         cook = self.request.user
         dish = Dish.objects.get(id=pk)
 
